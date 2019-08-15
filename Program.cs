@@ -1,4 +1,5 @@
 ﻿using System;
+using tabuleiro;
 
 namespace xadrez
 {
@@ -6,7 +7,12 @@ namespace xadrez
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Posicao p = new Posicao(1,2);
+            
+            Console.WriteLine("Posição: " + p);
+            
+            Console.ReadLine();
+
         }
     }
 }
