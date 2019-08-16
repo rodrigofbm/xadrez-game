@@ -6,13 +6,15 @@ namespace xadrez {
         public Tabuleiro tabuleiro { get; private set; }
         private int turno;
         private Cor jogadorAtual;
+        public bool gameOver { get; private set; }
 
         public PartidaDeXadrez()
         {
             this.tabuleiro = new Tabuleiro(8,8);
             this.turno = 1;
             this.jogadorAtual = Cor.Branca;
-
+            this.gameOver = false;
+            
             this.ColocarPecas();
         }
 
@@ -39,8 +41,8 @@ namespace xadrez {
             }            
         }
 
-        public void ExecutaMovimento(Posicao origim, Posicao destino) {
-            Peca p = tabuleiro.RetirarPeca(origim);
+        public void ExecutaMovimento(Posicao origem, Posicao destino) {
+            Peca p = tabuleiro.RetirarPeca(origem);
             p.IncrementaMovimento();
             Peca pecaCapturada = tabuleiro.RetirarPeca(destino);
 

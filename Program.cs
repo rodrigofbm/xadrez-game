@@ -7,9 +7,21 @@ namespace xadrez
     {
         static void Main(string[] args)
         {
-            PartidaDeXadrez tabuleiro = new PartidaDeXadrez();
+            PartidaDeXadrez partida = new PartidaDeXadrez();
 
-            Screen.ImprimeTabuleiro(tabuleiro.tabuleiro);
+            while(!partida.gameOver){
+                Console.Clear();
+                Screen.ImprimeTabuleiro(partida.tabuleiro);
+
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.Write("Origem: ");
+                Posicao origem = Screen.LerPosicaoXadrez().ToPosicao();
+                Console.Write("Destino: ");
+                Posicao destino = Screen.LerPosicaoXadrez().ToPosicao();
+
+                partida.ExecutaMovimento(origem, destino);
+            }
             
             Console.ReadLine();
         }

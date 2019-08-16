@@ -32,5 +32,13 @@ namespace xadrez {
                 Console.ForegroundColor = aux;
             }
         }
+
+        public static PosicaoXadrez LerPosicaoXadrez() {
+            string pos = Console.ReadLine();
+            char coluna = pos[0];
+            int linha = int.Parse(pos[1] + "");
+
+            return new PosicaoXadrez(coluna, linha);
+        }
     }
 }
