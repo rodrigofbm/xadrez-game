@@ -19,8 +19,12 @@ namespace tabuleiro {
         }
 
         public void AdicionaPeca(Peca peca, Posicao pos) {
-            pecas[pos.linha, pos.coluna] = peca;
-            peca.posicao = pos;
+            if(!ExistePeca(pos)) {
+                pecas[pos.linha, pos.coluna] = peca;
+                peca.posicao = pos;
+            }else {
+                throw new TabuleiroException("Já existe peça nesta posição");
+            }  
         }
 
         public bool isValidPos(Posicao pos) {
