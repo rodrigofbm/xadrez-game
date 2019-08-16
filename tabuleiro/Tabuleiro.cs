@@ -14,9 +14,30 @@ namespace tabuleiro {
             return pecas[linha, coluna];
         }
 
+        public Peca Peca(Posicao pos) {
+            return pecas[pos.linha, pos.coluna];
+        }
+
         public void AdicionaPeca(Peca peca, Posicao pos) {
             pecas[pos.linha, pos.coluna] = peca;
             peca.posicao = pos;
+        }
+
+        public bool isValidPos(Posicao pos) {
+            if((pos.linha < 0 || pos.linha >= linhas) || (pos.coluna < 0 || pos.coluna >= colunas)) 
+                return false;
+            
+            return true;
+        }
+
+        public void ValidarPosicao(Posicao pos) {
+            if(!isValidPos(pos))
+                throw new TabuleiroException("Posição inválida");
+        }
+
+        public bool ExistePeca(Posicao pos) {
+            this.ValidarPosicao(pos);
+            return Peca(pos) != null;
         }
     }
 }
