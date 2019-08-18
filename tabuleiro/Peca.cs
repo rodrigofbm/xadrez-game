@@ -15,5 +15,13 @@ namespace tabuleiro {
         public void IncrementaMovimento() {
             qtdMovimentos++;
         }
+
+        protected bool PodeMover(Posicao pos) {
+            Peca p = tabuleiro.Peca(pos);
+
+            return p == null || p.cor != this.cor;
+        }
+
+        abstract public bool[,] MovimentosPossiveis();
     }
 }

@@ -13,11 +13,15 @@ namespace xadrez
                 Console.Clear();
                 Screen.ImprimeTabuleiro(partida.tabuleiro);
 
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.Write("Origem: ");
+                Console.Write("\nOrigem: ");
                 Posicao origem = Screen.LerPosicaoXadrez().ToPosicao();
-                Console.Write("Destino: ");
+
+                bool[,] movPoss = partida.tabuleiro.Peca(origem).MovimentosPossiveis();
+                Console.Clear();
+                Screen.ImprimeTabuleiro(partida.tabuleiro, movPoss);
+                Console.WriteLine();
+
+                Console.Write("\nDestino: ");
                 Posicao destino = Screen.LerPosicaoXadrez().ToPosicao();
 
                 partida.ExecutaMovimento(origem, destino);
