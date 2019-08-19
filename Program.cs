@@ -12,11 +12,7 @@ namespace xadrez
             while(!partida.gameOver){
                 try{
                     Console.Clear();
-                    Screen.ImprimeTabuleiro(partida.tabuleiro);
-
-                    Console.WriteLine();
-                    Console.WriteLine("Turno " + partida.turno);
-                    Console.WriteLine("Aguardando jogada. Peça " + partida.jogadorAtual);
+                    Screen.ImprimirPartida(partida);
 
                     Console.Write("\nOrigem: ");
                     Posicao origem = Screen.LerPosicaoXadrez().ToPosicao();
