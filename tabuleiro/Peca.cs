@@ -22,6 +22,24 @@ namespace tabuleiro {
             return p == null || p.cor != this.cor;
         }
 
+        public bool ExisteMovimentosPossiveis() {
+            bool[,] mat = MovimentosPossiveis();
+
+            for(var i = 0; i < tabuleiro.linhas; i++) {
+                for(var j = 0; j < tabuleiro.colunas; j++) {
+                    if(mat[i,j]) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool PodeMoverPara(Posicao pos) {
+            return MovimentosPossiveis()[pos.linha, pos.coluna];
+        }
+
         abstract public bool[,] MovimentosPossiveis();
     }
 }

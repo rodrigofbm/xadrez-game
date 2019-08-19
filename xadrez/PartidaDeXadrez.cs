@@ -4,8 +4,8 @@ using tabuleiro;
 namespace xadrez {
     class PartidaDeXadrez {
         public Tabuleiro tabuleiro { get; private set; }
-        private int turno;
-        private Cor jogadorAtual;
+        public int turno { get; private set; }
+        public Cor jogadorAtual { get; private set; }
         public bool gameOver { get; private set; }
 
         public PartidaDeXadrez()
@@ -41,12 +41,44 @@ namespace xadrez {
             }            
         }
 
+        public void ValidarPosicaoDeOrigem(Posicao pos) {
+            if(tabuleiro.Peca(pos) == null) {
+                throw new TabuleiroException("Não existe peça na posição selecionada!");
+            }
+            if(tabuleiro.Peca(pos).cor != jogadorAtual) {
+                throw new TabuleiroException("Essa peça não é sua!");
+            }
+            if(!tabuleiro.Peca(pos).ExisteMovimentosPossiveis()) {
+                throw new TabuleiroException("Atualmente não é possível movimentar essa peça!");
+            }
+        }
+
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino) {
+            if(!tabuleiro.Peca(origem).PodeMoverPara(destino)) {
+                throw new TabuleiroException("Posição de destino inválida!");
+            }
+        }
+
         public void ExecutaMovimento(Posicao origem, Posicao destino) {
             Peca p = tabuleiro.RetirarPeca(origem);
             p.IncrementaMovimento();
             Peca pecaCapturada = tabuleiro.RetirarPeca(destino);
 
             tabuleiro.AdicionaPeca(p, destino);
+        }
+
+        public void RealizaJogada(Posicao origem, Posicao destino) {
+            this.ExecutaMovimento(origem, destino);
+            this.turno++;
+            this.MudaJogador();
+        }
+
+        private void MudaJogador() {
+            if(this.jogadorAtual == Cor.Branca) {
+                this.jogadorAtual = Cor.Amarela;
+            }else {
+                 this.jogadorAtual = Cor.Branca;
+            }
         }
     }
 }
