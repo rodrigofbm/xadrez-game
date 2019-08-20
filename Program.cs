@@ -17,16 +17,16 @@ namespace xadrez
                     Console.Write("\nOrigem: ");
                     Posicao origem = Screen.LerPosicaoXadrez().ToPosicao();
                     partida.ValidarPosicaoDeOrigem(origem);
-
-                    bool[,] movPoss = partida.tabuleiro.Peca(origem).MovimentosPossiveis();
+                   
                     Console.Clear();
+                    bool[,] movPoss = partida.tabuleiro.Peca(origem).MovimentosPossiveis();
                     Screen.ImprimeTabuleiro(partida.tabuleiro, movPoss);
                     Console.WriteLine();
 
                     Console.Write("\nDestino: ");
                     Posicao destino = Screen.LerPosicaoXadrez().ToPosicao();
-
                     partida.ValidarPosicaoDeDestino(origem, destino);
+                    
 
                     partida.RealizaJogada(origem, destino);
                 }catch(TabuleiroException e) {

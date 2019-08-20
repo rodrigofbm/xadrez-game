@@ -16,6 +16,10 @@ namespace tabuleiro {
             qtdMovimentos++;
         }
 
+        public void DecrementaMovimento() {
+            qtdMovimentos--;
+        }
+
         protected bool PodeMover(Posicao pos) {
             Peca p = tabuleiro.Peca(pos);
 
