@@ -10,11 +10,16 @@ namespace xadrez {
             Console.WriteLine();
             ImprimirPecasCapturadas(partida);
             Console.WriteLine();
-            Console.WriteLine("\nTurno " + partida.turno);
-            Console.WriteLine("Aguardando jogada. Peça " + partida.jogadorAtual);
+            if(!partida.gameOver) {
+                Console.WriteLine("\nTurno " + partida.turno);
+                Console.WriteLine("Aguardando jogada. Peça " + partida.jogadorAtual);
 
-            if(partida.xeque) {
-                Console.WriteLine("XEQUE!");
+                if(partida.xeque) {
+                    Console.WriteLine("XEQUE!");
+                }
+            }else {
+                Console.WriteLine("\nXEQUEMATE");
+                Console.WriteLine("Vencedor: " + partida.jogadorAtual);
             }
         }
 

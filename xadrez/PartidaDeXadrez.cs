@@ -25,19 +25,47 @@ namespace xadrez {
         }
 
         public bool EstaEmXeque(Cor cor) {
-            Cor jogadorAdversario = JogadorAdversario(cor);
-            Peca r = Rei(jogadorAdversario);
+            Peca r = Rei(cor);
 
             if(r == null) 
                 throw new TabuleiroException("Não existe rei no tabuleiro");
 
-            foreach(Peca x in PecasEmJogo(cor)) {
+            foreach(Peca x in PecasEmJogo(JogadorAdversario(cor))) {
                 if(x.MovimentosPossiveis()[r.posicao.linha, r.posicao.coluna]){
                     return true;
                 }
             } 
 
             return false;
+        }
+
+        public bool EstaEmXequeMate(Cor cor) {
+            if(!EstaEmXeque(cor)) {
+                return false;
+            }
+            //se o rei adversário estiver em xeque, verificamos se é possível sair do xeque
+            foreach(Peca x in PecasEmJogo(cor)) {
+                Posicao destino;
+                Posicao origem = x.posicao;
+                bool[,] mat = x.MovimentosPossiveis();
+
+                for (int i = 0; i < tabuleiro.linhas; i++) {
+                    for (int j = 0; j < tabuleiro.colunas; j++) {
+                        if(mat[i,j]) {
+                            destino = new Posicao(i,j);
+                            Peca pecaCapturada =  ExecutaMovimento(origem, destino);
+                            bool estaEmXeque = EstaEmXeque(cor);
+                            ResetarJogada(origem, destino, pecaCapturada);
+
+                            if(!estaEmXeque) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return true;
         }
 
         public void ResetarJogada(Posicao origem, Posicao destino, Peca pecaCapturada) {
@@ -74,20 +102,20 @@ namespace xadrez {
             try{
                 // peças brancas
                 ColocarNovaPeca('c', 1, new Torre(tabuleiro, Cor.Branca));
-                ColocarNovaPeca('c', 2, new Torre(tabuleiro, Cor.Branca));
-                ColocarNovaPeca('d', 3, new Torre(tabuleiro, Cor.Branca));
-                ColocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.Branca));
+                ColocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.Branca));
+                ColocarNovaPeca('h', 7, new Torre(tabuleiro, Cor.Branca));
+                /* ColocarNovaPeca('e', 2, new Torre(tabuleiro, Cor.Branca));
                 ColocarNovaPeca('e', 1, new Torre(tabuleiro, Cor.Branca));
                 ColocarNovaPeca('d', 1, new Rei(tabuleiro, Cor.Branca));
-                
+                 */
 
                 // peças amarelas
-                ColocarNovaPeca('c', 8, new Torre(tabuleiro, Cor.Amarela));
-                ColocarNovaPeca('c', 7, new Torre(tabuleiro, Cor.Amarela));
-                ColocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.Amarela));
+                ColocarNovaPeca('a', 8, new Rei(tabuleiro, Cor.Amarela));
+                ColocarNovaPeca('b', 8, new Torre(tabuleiro, Cor.Amarela));
+                /* ColocarNovaPeca('d', 7, new Torre(tabuleiro, Cor.Amarela));
                 ColocarNovaPeca('e', 7, new Torre(tabuleiro, Cor.Amarela));
                 ColocarNovaPeca('e', 8, new Torre(tabuleiro, Cor.Amarela));
-                ColocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.Amarela));
+                ColocarNovaPeca('d', 8, new Rei(tabuleiro, Cor.Amarela)); */
             }catch(TabuleiroException e) {
                 Console.WriteLine(e.Message);
             }            
@@ -102,7 +130,7 @@ namespace xadrez {
             if(tabuleiro.Peca(pos) == null) {
                 throw new TabuleiroException("Não existe peça na posição selecionada!");
             }
-            if(tabuleiro.Peca(pos).cor != jogadorAtual) {
+            if(jogadorAtual != tabuleiro.Peca(pos).cor) {
                 throw new TabuleiroException("Essa peça não é sua!");
             }
             if(!tabuleiro.Peca(pos).ExisteMovimentosPossiveis()) {
@@ -133,19 +161,23 @@ namespace xadrez {
         public void RealizaJogada(Posicao origem, Posicao destino) {
             Peca pecaCapturada = this.ExecutaMovimento(origem, destino);
 
-            if(EstaEmXeque(JogadorAdversario(jogadorAtual))) {
+            if(EstaEmXeque(jogadorAtual)) {
                 ResetarJogada(origem, destino, pecaCapturada);
                 throw new TabuleiroException("Você não pode se colocar em xeque!");
             }
 
-            if(EstaEmXeque(jogadorAtual)) {
+            if(EstaEmXeque(JogadorAdversario(jogadorAtual))) {
                 xeque = true;
             }else {
                 xeque = false;
             }
 
-            this.turno++;
-            this.MudaJogador();
+            if(EstaEmXequeMate(JogadorAdversario(jogadorAtual))) {
+                gameOver = true;
+            }else {
+                this.turno++;
+                this.MudaJogador();
+            }
         }
 
         private void MudaJogador() {

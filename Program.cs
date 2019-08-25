@@ -27,7 +27,6 @@ namespace xadrez
                     Posicao destino = Screen.LerPosicaoXadrez().ToPosicao();
                     partida.ValidarPosicaoDeDestino(origem, destino);
                     
-
                     partida.RealizaJogada(origem, destino);
                 }catch(TabuleiroException e) {
                     Console.WriteLine(e.Message);
@@ -35,6 +34,9 @@ namespace xadrez
                     Console.ReadLine();
                 }
             }
+
+            Console.Clear();
+            Screen.ImprimirPartida(partida);
             
             Console.ReadLine();
         }
