@@ -2,58 +2,57 @@ using tabuleiro;
 
 namespace xadrez {
     class Torre: Peca {
-        public Torre(Tabuleiro tabuleiro, Cor cor) : base(tabuleiro, cor) {}
+        public Torre(Cor cor, Tabuleiro tab): base(cor, tab) {}
 
         public override string ToString() {
             return "T";
         }
 
         public override bool[,] MovimentosPossiveis() {
-            bool[,] mat = new bool[tabuleiro.linhas, tabuleiro.colunas];
+            bool[,] posicoes = new bool[tabuleiro.linhas, tabuleiro.colunas];
+            Posicao pos = new Posicao(0,0);
 
-            Posicao pos =  new Posicao(0,0);
-
-            // acima
-            pos.DefinirPosicoesMatriz(this.posicao.linha - 1, this.posicao.coluna);
-            while(tabuleiro.isValidPos(pos) && PodeMover(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                if(tabuleiro.Peca(pos) != null && tabuleiro.Peca(pos).cor != this.cor)
+            //Acima
+            pos.DefinirPosicao(posicao.linha - 1, posicao.coluna);
+            while(tabuleiro.ValidaPosicao(pos) && PodeMover(pos)) {
+                posicoes[pos.linha, pos.coluna] = true;
+                if(tabuleiro.GetPeca(pos) != null) {
                     break;
-
-                pos.linha--;
+                }
+                pos.DefinirPosicao(pos.linha - 1, pos.coluna);
             }
 
-            // abaixo
-            pos.DefinirPosicoesMatriz(this.posicao.linha + 1, this.posicao.coluna);
-            while(tabuleiro.isValidPos(pos) && PodeMover(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                if(tabuleiro.Peca(pos) != null && tabuleiro.Peca(pos).cor != this.cor)
+            //Direita
+            pos.DefinirPosicao(posicao.linha, posicao.coluna + 1);
+            while(tabuleiro.ValidaPosicao(pos) && PodeMover(pos)) {
+                posicoes[pos.linha, pos.coluna] = true;
+                if(tabuleiro.GetPeca(pos) != null) {
                     break;
-
-                pos.linha++;
+                }
+                pos.DefinirPosicao(pos.linha, pos.coluna + 1);
             }
 
-            // direita
-            pos.DefinirPosicoesMatriz(this.posicao.linha, this.posicao.coluna + 1);
-            while(tabuleiro.isValidPos(pos) && PodeMover(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                if(tabuleiro.Peca(pos) != null && tabuleiro.Peca(pos).cor != this.cor)
+            //Abaixo
+            pos.DefinirPosicao(posicao.linha + 1, posicao.coluna);
+            while(tabuleiro.ValidaPosicao(pos) && PodeMover(pos)) {
+                posicoes[pos.linha, pos.coluna] = true;
+                if(tabuleiro.GetPeca(pos) != null) {
                     break;
-
-                pos.coluna++;
+                }
+                pos.DefinirPosicao(pos.linha + 1, pos.coluna);
             }
 
-            // esquerda
-            pos.DefinirPosicoesMatriz(this.posicao.linha, this.posicao.coluna - 1);
-            while(tabuleiro.isValidPos(pos) && PodeMover(pos)) {
-                mat[pos.linha, pos.coluna] = true;
-                if(tabuleiro.Peca(pos) != null && tabuleiro.Peca(pos).cor != this.cor)
+            //Esquerda
+            pos.DefinirPosicao(posicao.linha, posicao.coluna - 1);
+            while(tabuleiro.ValidaPosicao(pos) && PodeMover(pos)) {
+                posicoes[pos.linha, pos.coluna] = true;
+                if(tabuleiro.GetPeca(pos) != null) {
                     break;
-
-                pos.coluna--;
+                }
+                pos.DefinirPosicao(pos.linha, pos.coluna - 1);
             }
 
-            return mat;
+            return posicoes;
         }
     }
 }

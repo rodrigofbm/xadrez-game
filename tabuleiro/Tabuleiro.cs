@@ -1,7 +1,9 @@
+using System;
+
 namespace tabuleiro {
     class Tabuleiro {
-        public int linhas { get; set; }
-        public int colunas { get; set; }
+        public int linhas { get; private set; }
+        public int colunas { get; private set; }
         private Peca[,] pecas;
 
         public Tabuleiro(int linhas, int colunas) {
@@ -10,49 +12,49 @@ namespace tabuleiro {
             this.pecas = new Peca[linhas, colunas];
         }
 
-        public Peca Peca(int linha, int coluna) {
+        public Peca GetPeca(int linha, int coluna) {
             return pecas[linha, coluna];
         }
 
-        public Peca Peca(Posicao pos) {
+        public Peca GetPeca(Posicao pos) {
             return pecas[pos.linha, pos.coluna];
         }
 
-        public void AdicionaPeca(Peca peca, Posicao pos) {
-            if(!ExistePeca(pos)) {
-                pecas[pos.linha, pos.coluna] = peca;
-                peca.posicao = pos;
-            }else {
-                throw new TabuleiroException("Já existe peça nesta posição");
-            }  
+        public void ColocaPeca(Peca p, Posicao pos) {
+            ExistePeca(pos);
+            pecas[pos.linha, pos.coluna] = p;
+            p.posicao = pos;
         }
 
-        public Peca RetirarPeca(Posicao pos) {
-            if(Peca(pos) == null) 
+        public Peca RetiraPeca(Posicao pos) {
+            if(GetPeca(pos) == null) {
                 return null;
-            
-            Peca aux = Peca(pos);
+            }
+
+            Peca aux = GetPeca(pos);
             aux.posicao = null;
             pecas[pos.linha, pos.coluna] = null;
 
             return aux;
         }
 
-        public bool isValidPos(Posicao pos) {
-            if((pos.linha < 0 || pos.linha >= linhas) || (pos.coluna < 0 || pos.coluna >= colunas)) 
-                return false;
-            
-            return true;
+        public bool ValidaPosicao(Posicao pos) {
+            if((pos.linha >= 0 && pos.linha < linhas) && (pos.coluna >= 0 && pos.coluna < colunas)) {
+                return true;
+            }
+
+            return false;
         }
 
-        public void ValidarPosicao(Posicao pos) {
-            if(!isValidPos(pos))
-                throw new TabuleiroException("Posição inválida");
+        public void ChecaValidadePosicao(Posicao pos) {
+            if(!ValidaPosicao(pos)) 
+                throw new TabuleiroException("A posição escolhida é inválida");
         }
 
-        public bool ExistePeca(Posicao pos) {
-            this.ValidarPosicao(pos);
-            return Peca(pos) != null;
+        public void ExistePeca(Posicao pos) {
+            ChecaValidadePosicao(pos);
+            if(pecas[pos.linha, pos.coluna] != null)
+                throw new TabuleiroException("Já existe uma peça nessa posição");
         }
     }
 }
